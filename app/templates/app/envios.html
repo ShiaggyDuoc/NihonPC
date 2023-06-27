@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="section-container">
+    <h1 class="section-title">Envios</h1>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Tiempo de Entrega</h4>
+            <p class="card-text">El tiempo de entrega estimado para nuestras órdenes es de 3 a 5 días hábiles.</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Costo</h4>
+            <p class="card-text">El costo de envío es gratuito para todas las órdenes dentro de Chile.</p>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Métodos de Pago</h4>
+            <p class="card-text">Aceptamos los siguientes métodos de pago:</p>
+            <ul>
+                <li>Tarjetas de crédito (Visa, Mastercard, American Express)</li>
+                <li>Transferencia bancaria</li>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Información Adicional</h4>
+            <p class="card-text">Si tienes alguna pregunta sobre el proceso de envío o necesitas ayuda para realizar tu compra, no dudes en contactarnos a través de nuestro correo electrónico o número de teléfono de atención al cliente.</p>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
