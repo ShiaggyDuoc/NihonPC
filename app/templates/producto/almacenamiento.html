@@ -10,13 +10,13 @@
 <div class="Productos row">
     {% for p in productos %}
     {% if p.tipo_producto.nombre == "Almacenamiento" %}
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4 {% cycle 'first-col' 'middle-col' 'last-col' %}">
         <div class="card">
             <div class="card-body">
                 <div class="Producto">
                     <div class="contenedor_producto">
                         {% if p.imagen %}
-                            <img src="{{ p.imagen.url }}" alt="imagen teclado" style="max-width: 300px; max-height: 300px;">
+                            <img src="{{ p.imagen.url }}" alt="imagen teclado" style="width: 300px; height: 300px;">
                         {% endif %}
                         <div class="detalle">
                             <h4>{{ p.marca | capfirst }}</h4>
@@ -29,10 +29,6 @@
             </div>
         </div>
     </div>
-    {% endif %}
-    {% if forloop.counter|divisibleby:3 and not forloop.last %}
-    </div>
-    <div class="Productos row">
     {% endif %}
     {% endfor %}
 </div>
