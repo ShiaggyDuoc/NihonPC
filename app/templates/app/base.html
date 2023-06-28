@@ -45,13 +45,17 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admin:index' %}" style="color: #FFFFFF;">Admin</a>
-                        </li>
+                        </li>                   
                     </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <button class="btn btn-primary ml-auto" onclick="toggleCarrito()">Carrito</button>
+                    </ul>   
                 </div>
             </div>
         </nav>
     </header>
-    
+
+    <div id="carritoContainer" class="position-fixed end-0 mt-1 me-2" style="z-index: 9999;"></div>
 
 <div class="container" style="margin-bottom: 40px; margin-top: 20px;">
 
@@ -98,5 +102,92 @@
 
     {% endblock %}
 
+    <style>
+        #carritoContainer {
+            max-height: 300px; /* Altura máxima del contenedor */
+            overflow-y: auto; /* Habilitar la barra de desplazamiento vertical */
+        }
+    </style>
+    
+    <script>
+        var productos = [];
+    
+        if (localStorage.getItem('carritoProductos')) {
+            productos = JSON.parse(localStorage.getItem('carritoProductos'));
+        }
+    
+        function agregarProducto(nombre, precio) {
+            var productoExistente = productos.find(function (p) {
+                return p.nombre === nombre;
+            });
+    
+            if (productoExistente) {
+                productoExistente.cantidad++;
+            } else {
+                productos.push({ nombre: nombre, precio: precio, cantidad: 1 });
+            }
+    
+            localStorage.setItem('carritoProductos', JSON.stringify(productos));
+    
+            actualizarCarrito();
+        }
+    
+        function mostrarCarrito() {
+            var carritoContainer = document.getElementById("carritoContainer");
+            carritoContainer.style.display = "block";
+    
+            var carritoHTML = `
+                <div class="sidebar">
+                    <ul class="list-group">
+                        <li class="list-group-item" style="background-color: #141414; color: #FFFFFF;">Carrito de compra</li>
+            `;
+    
+            var precioTotal = 0;
+    
+            for (var i = 0; i < productos.length; i++) {
+                carritoHTML += `
+                    <li class="list-group-item">Producto: ${productos[i].nombre} (${productos[i].cantidad})</li>
+                `;
+                precioTotal += productos[i].precio * productos[i].cantidad;
+            }
+    
+            carritoHTML += `
+                    <li class="list-group-item">Precio Total: $${precioTotal.toLocaleString()}</li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar</button>
+                        <button class="btn btn-success" onclick="window.location.href='pago.html'">Pagar</button>
+                    </li>
+                </ul>
+            </div>
+            `;
+    
+            carritoContainer.innerHTML = carritoHTML;
+        }
+    
+        function ocultarCarrito() {
+            var carritoContainer = document.getElementById("carritoContainer");
+            carritoContainer.style.display = "none";
+        }
+    
+        function vaciarCarrito() {
+            productos = [];
+            localStorage.removeItem('carritoProductos');
+            document.getElementById("carritoContainer").innerHTML = "";
+        }
+    
+        function actualizarCarrito() {
+            mostrarCarrito();
+        }
+    
+        function toggleCarrito() {
+            var carritoContainer = document.getElementById("carritoContainer");
+            if (carritoContainer.style.display === "none") {
+                mostrarCarrito();
+            } else {
+                ocultarCarrito();
+            }
+        }
+    </script>
+    
 </body>
 </html>
