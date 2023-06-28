@@ -48,19 +48,44 @@ def tarjeta(request):
     return render(request, 'producto/tarjeta.html', data)
 
 def procesador(request):
-    return render(request, 'producto/procesador.html')
+    productos = Producto.objects.all()
+    data = { 
+        'productos': productos
+    }
+
+    return render(request, 'producto/procesador.html', data)
 
 def almacenamiento(request):
-    return render(request, 'producto/almacenamiento.html')
+    productos = Producto.objects.all()
+    data = { 
+        'productos': productos
+    }
+
+    return render(request, 'producto/almacenamiento.html', data)
 
 def gabinete(request):
-    return render(request, 'producto/gabinete.html')
+    productos = Producto.objects.all()
+    data = { 
+        'productos': productos
+    }
+
+    return render(request, 'producto/gabinete.html', data)
 
 def placa(request):
-    return render(request, 'producto/placa.html')
+    productos = Producto.objects.all()
+    data = { 
+        'productos': productos
+    }
+
+    return render(request, 'producto/placa.html', data)
 
 def fuente(request):
-    return render(request, 'producto/fuente.html')
+    productos = Producto.objects.all()
+    data = { 
+        'productos': productos
+    }
+
+    return render(request, 'producto/fuente.html', data)
 
 def contacto(request):
     data = { 
