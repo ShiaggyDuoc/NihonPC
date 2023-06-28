@@ -21,7 +21,12 @@
                         <div class="detalle">
                             <h4>{{ p.marca | capfirst }}</h4>
                             <h5>{{ p.nombre | title }}</h5>
+<<<<<<< Updated upstream
                             <h3> ${{ p.precio | floatformat:0 | intcomma }}</h3>
+=======
+                            <h3> ${{ p.precio | intcomma }}</h3>
+                            <button class="btn btn-primary" onclick="agregarProducto('{{ p.nombre }}', {{ p.precio }})">Agregar al carrito</button>
+>>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>
