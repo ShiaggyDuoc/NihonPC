@@ -10,7 +10,7 @@
 <div class="Productos row">
     {% for p in productos %}
     {% if p.tipo_producto.nombre == "Mouse" %}
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4 {% cycle 'first-col' 'middle-col' 'last-col' %}">
         <div class="card">
             <div class="card-body">
                 <div class="Producto">
@@ -29,7 +29,6 @@
         </div>
     </div>
     {% endif %}
-    {% cycle '' '' '' '<div class="w-100"></div>' %}
     {% endfor %}
 </div>
 
