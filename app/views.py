@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ContactoForm,CustomUserCreationForm
+from .forms import ContactoForm,CustomUserCreationForm, ProductoForm
 from .models import Producto
 from django.contrib import messages
 from django.http import Http404
@@ -43,6 +43,8 @@ def envios(request):
 
 def devoluciones(request):
     return render(request, 'app/devoluciones.html')
+
+
 
 def teclado(request):
     productos = Producto.objects.all()
@@ -121,3 +123,56 @@ def contacto(request):
             data["form"] = "formulario"
     
     return render(request, 'app/contacto.html', data)
+
+def agregar(request):
+    data = { 
+        'form': ProductoForm()
+    }
+
+    if request.method== 'POST':
+        formulario = ProductoForm(data=request.POST, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, " Modificado Correctamente")
+        else:
+            data["form"]=formulario
+    
+    return render(request, 'formularios/agregar.html', data)
+
+
+def listarP(request):
+
+    productos = Producto.objects.all()
+
+    data = {
+        'productos' : productos
+    }
+
+    return render(request,'formularios/listarP.html', data)
+
+def modificar_producto (request, id):
+
+    producto = get_object_or_404(Producto, id=id)
+
+    data = {
+        'form' : ProductoForm(instance=producto)
+    }
+
+    if request.method== 'POST':
+        formulario = ProductoForm(data=request.POST,instance=producto, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, " Modificado Correctamente")
+            return redirect(to='listarP')
+        else:
+            data["form"]=formulario
+
+    return render(request, 'formularios/modificarP.html',data)
+
+
+def eliminar_producto (request, id):
+
+    producto = get_object_or_404(Producto, id=id)
+    producto.delete()
+    messages.success(request, "Eliminado Correctamente")
+    return redirect(to='listarP')
