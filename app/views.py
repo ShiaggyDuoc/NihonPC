@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth import authenticate, login 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -179,3 +180,22 @@ def eliminar_producto (request, id):
     producto.delete()
     messages.success(request, "Eliminado Correctamente")
     return redirect(to='listarP')
+
+
+@permission_required('app.view_producto')
+def listarU(request):
+
+    usuarios = User.objects.all()
+
+    data = {
+        'usuarios' : usuarios
+    }
+    return render(request,'formularios/listarU.html', data)
+
+
+def eliminar_usuario (request, id):
+
+    usuario = User.objects.get(id=id)
+    usuario.delete()
+    messages.success(request, "Eliminado Correctamente")
+    return redirect(to='listarU')
