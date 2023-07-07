@@ -3,7 +3,7 @@ from .forms import ContactoForm,CustomUserCreationForm, ProductoForm
 from .models import Producto
 from django.contrib import messages
 from django.http import Http404
-from django.contrib.auth import authenticate, login 
+from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
@@ -23,12 +23,14 @@ def registro(request):
     if request.method == 'POST':
         formulario = CustomUserCreationForm(data=request.POST)
         if formulario.is_valid():
-            formulario.save()
-            user = authenticate(username=formulario.cleaned_data["username"], password= formulario.cleaned_data["password1"])
-            login(request, user)
-            messages.success(request, "te has registrado correctamente")
-            return redirect(to="index")
-        data["form"]= formulario
+            usuario = formulario.save()
+            user = authenticate(request, username=usuario.username, password=formulario.cleaned_data["password1"])
+            if user is not None:
+                auth_login(request, user)
+                messages.success(request, "Te has registrado correctamente")
+                return redirect('index')
+        data["form"] = formulario
+    
     return render(request, 'registration/registro.html', data)
 
 def nosotros(request):
@@ -45,8 +47,6 @@ def envios(request):
 
 def devoluciones(request):
     return render(request, 'app/devoluciones.html')
-
-
 
 def teclado(request):
     productos = Producto.objects.all()
@@ -180,7 +180,6 @@ def eliminar_producto (request, id):
     producto.delete()
     messages.success(request, "Eliminado Correctamente")
     return redirect(to='listarP')
-
 
 @permission_required('app.view_producto')
 def listarU(request):
