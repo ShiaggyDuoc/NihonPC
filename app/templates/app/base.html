@@ -53,29 +53,30 @@
                             
                             </ul>
                         </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            {%if user.is_authenticated%}
-                                <li>
-                                    <a class="nav-link" href="{% url 'logout' %}">Cerrar sesion</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href="#">Bienvenido, {{user.username}} </a>
-                                </li>
-                                
-                            {%else%}
-                            <li>
-                                <a class="nav-link" href="{% url 'login' %}"> iniciar sesion</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="{% url 'registro' %}"> Registrarse</a>
-                            </li>
-                            {%endif%}
-                        </li>                  
+                        {% endif %}                 
                     </ul>
                     <ul class="navbar-nav ms-auto">
-                        <button class="btn btn-primary ml-auto" onclick="toggleCarrito()">Carrito</button>
-                    </ul>   
+                        {% if user.is_authenticated %}
+                            {% if not user.is_superuser %}
+                                <li>
+                                    <button class="btn btn-primary ml-auto" onclick="toggleCarrito()">Carrito</button>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="#">Bienvenido, {{ user.username }}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -181,7 +182,7 @@
                     <li class="list-group-item">Precio Total: $${precioTotal.toLocaleString()}</li>
                     <li class="list-group-item">
                         <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar</button>
-                        <button class="btn btn-success" onclick="window.location.href='#'">Pagar</button>
+                        <button class="btn btn-success"  onclick="mostrarDatosCarrito().href={% url 'pago' %}">Pagar</button>
                     </li>
                 </ul>
             </div>
@@ -189,6 +190,16 @@
     
             carritoContainer.innerHTML = carritoHTML;
         }
+
+        function mostrarDatosCarrito() {
+
+            var datosCarrito = encodeURIComponent(JSON.stringify(productos));
+
+            var url = "{% url 'pago' %}?carrito=" + datosCarrito;
+
+            window.location.href = url;
+        }
+
     
         function ocultarCarrito() {
             var carritoContainer = document.getElementById("carritoContainer");
